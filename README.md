@@ -329,6 +329,9 @@ Run:
 ```python
 import os
 
+# Define the dataset directory using the 'root' variable from the previous cell
+DATASET_DIR = root if 'root' in globals() else "dataset/fingers_final"
+
 CLASSES = ["0", "1", "2", "3", "4", "5"]
 
 for class_name in CLASSES:
