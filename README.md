@@ -253,19 +253,19 @@ Select the ZIP file you downloaded from GitHub.
 Now extract it:
 
 ```python
-import zipfile
-import os
+import zipfile, os
+with zipfile.ZipFile("dataset.zip", 'r') as zip_ref:
+    zip_ref.extractall("dataset")
 
-zip_path = next(
-    filename for filename in uploaded
-    if filename.lower().endswith(".zip")
-)
+# Handle the extra wrapper folder from zipping
+root = "dataset"
+contents = os.listdir(root)
+if len(contents) == 1 and os.path.isdir(os.path.join(root, contents[0])):
+    root = os.path.join(root, contents[0])
 
-with zipfile.ZipFile(zip_path, "r") as zip_ref:
-    zip_ref.extractall("/content/")
-
-print("Dataset extracted successfully.")
-print(os.listdir("/content/"))
+classes = sorted(os.listdir(root))
+print("Using folder:", root)
+print("Classes found:", classes)   # should now print ['0','1','2','3','4','5']
 ```
 
 ### Check the folder structure
