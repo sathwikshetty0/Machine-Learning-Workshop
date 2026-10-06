@@ -779,39 +779,22 @@ Now test the model on a new image that was not part of the training or testing d
 Upload the image:
 
 ```python
+
 from google.colab import files
+print("Take a photo of your hand showing some fingers, then upload it")
+uploaded = files.upload()
+fname = list(uploaded.keys())[0]
 
-uploaded_image = files.upload()
-```
+test_img = cv2.imread(fname)
+test_img = cv2.resize(test_img, (IMG_SIZE, IMG_SIZE))
+test_input = test_img.flatten() / 255.0
 
-Then run the following code, replacing `new_hand.jpg` with the actual uploaded filename:
-
-```python
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-
-image_path = "new_hand.jpg"
-
-image = cv2.imread(image_path)
-
-if image is None:
-    raise ValueError(
-        "Could not load the image. Check the filename."
-    )
-
-# Use the same preprocessing as training.
-image = cv2.resize(image, (64, 64))
-features = image.astype(np.float32).flatten() / 255.0
-
-prediction = model.predict(features.reshape(1, -1))[0]
-
-plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-plt.title(f"Predicted gesture: {prediction} finger(s)")
-plt.axis("off")
+prediction = model.predict([test_input])[0]
+plt.imshow(cv2.cvtColor(test_img, cv2.COLOR_BGR2RGB))
+plt.title(f"Model says: {prediction} fingers")
+plt.axis('off')
 plt.show()
 
-print("Predicted class:", prediction)
 ```
 
 ### Important limitation
