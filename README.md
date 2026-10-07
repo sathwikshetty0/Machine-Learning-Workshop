@@ -703,6 +703,25 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"Test accuracy: {accuracy:.2%}")
 ```
 
+Run:
+
+```python
+from google.colab import files
+print("Take a photo of your hand showing some fingers, then upload it")
+uploaded = files.upload()
+fname = list(uploaded.keys())[0]
+
+test_img = cv2.imread(fname)
+test_img = cv2.resize(test_img, (IMG_SIZE, IMG_SIZE))
+test_input = test_img.flatten() / 255.0
+
+prediction = model.predict([test_input])[0]
+plt.imshow(cv2.cvtColor(test_img, cv2.COLOR_BGR2RGB))
+plt.title(f"Model says: {prediction} fingers")
+plt.axis('off')
+plt.show()
+```
+
 For example, 36 correct predictions out of 48 would give 75% accuracy.
 
 Your result may be higher or lower. Record the actual result produced by your experiment.
@@ -818,9 +837,8 @@ print("Model saved successfully.")
 To download the model:
 
 ```python
-from google.colab import files
-
-files.download("hand_gesture_svm.joblib")
+joblib.dump(model, "shared_example_classifier.pkl")
+files.download("shared_example_classifier.pkl")
 ```
 
 ### Why save the model?
